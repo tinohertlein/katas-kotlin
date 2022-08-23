@@ -1,5 +1,6 @@
 package dev.hertlein.kata.marsrover
 
+import dev.hertlein.kata.marsrover.Rover.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -45,7 +46,7 @@ internal class RoverTest {
         }
 
         @ParameterizedTest
-        @CsvSource("MMMMMMMMMM,0:0:N","LMMMMMMMMMM,0:0:W","RMMMMMMMMMM,0:0:E", "RRMMMMMMMMMM,0:0:S")
+        @CsvSource("MMMMMMMMMM,0:0:N", "LMMMMMMMMMM,0:0:W", "RMMMMMMMMMM,0:0:E", "RRMMMMMMMMMM,0:0:S")
         fun `should wrap around from N`(input: String, output: String) {
             val position = rover.navigate(input)
 
@@ -75,6 +76,13 @@ internal class RoverTest {
             val position = rover.navigate("MMMMMMMMMM")
 
             assertThat(position).isEqualTo("0:0:N")
+        }
+
+        @Test
+        fun `#4`() {
+            val position = Rover(obstacles = listOf(Obstacle(Coordinate(0, 3)))).navigate("MMMM")
+
+            assertThat(position).isEqualTo("Err:0:2:N")
         }
     }
 }
