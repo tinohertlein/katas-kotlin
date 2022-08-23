@@ -1,3 +1,3 @@
 
-rootProject.name = "kata-marsrover-kotlin"
+rootProject.name = "katas-kotlin"
 

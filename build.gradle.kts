@@ -6,7 +6,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt").version("1.21.0")
 }
 
-group = "dev.hertlein.kata"
+group = "dev.hertlein.katas"
 version = "1.0-SNAPSHOT"
 
 repositories {
