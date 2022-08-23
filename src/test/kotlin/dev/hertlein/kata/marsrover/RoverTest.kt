@@ -39,11 +39,12 @@ internal class RoverTest {
             assertThat(position).isEqualTo("0:0:N")
         }
 
-        @Test
-        fun `should move facing 'N'`() {
-            val position = rover.navigate("MM")
+        @ParameterizedTest
+        @CsvSource("MM,0:2:N", "RM,1:0:E", "RRM,0:-1:S", "RRRM,-1:0:W")
+        fun `should move`(input: String, output: String) {
+            val position = rover.navigate(input)
 
-            assertThat(position).isEqualTo("2:0:N")
+            assertThat(position).isEqualTo(output)
         }
 
         @ParameterizedTest

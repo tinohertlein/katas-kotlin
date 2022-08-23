@@ -42,9 +42,17 @@ class Rover {
     private fun move(currentPosition: Position): Position {
         return when (currentPosition.direction) {
             Direction.N -> currentPosition.let {
+                it.copy(coordinate = it.coordinate.copy(y = it.coordinate.y + 1))
+            }
+            Direction.E -> currentPosition.let {
                 it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x + 1))
             }
-            else -> currentPosition
+            Direction.S -> currentPosition.let {
+                it.copy(coordinate = it.coordinate.copy(y = it.coordinate.y - 1))
+            }
+            Direction.W -> currentPosition.let {
+                it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x - 1))
+            }
         }
     }
 
