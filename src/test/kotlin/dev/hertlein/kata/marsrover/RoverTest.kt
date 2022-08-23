@@ -44,6 +44,13 @@ internal class RoverTest {
             assertThat(position).isEqualTo("2:0:N")
         }
 
+        @Test
+        fun `should turn left facing 'N'`() {
+            val position = rover.navigate("L")
+
+            assertThat(position).isEqualTo("0:0:E")
+        }
+
     }
 
 }

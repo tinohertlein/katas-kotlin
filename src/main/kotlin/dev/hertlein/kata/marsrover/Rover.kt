@@ -23,8 +23,13 @@ class Rover {
     fun navigate(commandInput: String = ""): String {
         val commands = toCommands(commandInput)
 
-        return commands.fold(startingPosition) { currentPosition, _ -> move(currentPosition) }.toString()
+        return commands.fold(startingPosition) { currentPosition, command ->
+            if (command == Command.M) move(
+                currentPosition
+            ) else turnLeft(currentPosition)
+        }.toString()
     }
+
 
     fun toCommands(commandInput: String) = commandInput
         .split("")
@@ -35,6 +40,15 @@ class Rover {
         return when (currentPosition.direction) {
             Direction.N -> currentPosition.let {
                 it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x + 1))
+            }
+            else -> currentPosition
+        }
+    }
+
+    private fun turnLeft(currentPosition: Position): Position {
+        return when (currentPosition.direction) {
+            Direction.N -> currentPosition.let {
+                it.copy(direction = Direction.E)
             }
             else -> currentPosition
         }
