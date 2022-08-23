@@ -54,6 +54,14 @@ internal class RoverTest {
             assertThat(position).isEqualTo("0:0:$output")
         }
 
+        @ParameterizedTest
+        @CsvSource("R,W", "RR,S", "RRR,E", "RRRR,N")
+        fun `should turn right`(input: String, output: String) {
+            val position = rover.navigate(input)
+
+            assertThat(position).isEqualTo("0:0:$output")
+        }
+
     }
 
 }

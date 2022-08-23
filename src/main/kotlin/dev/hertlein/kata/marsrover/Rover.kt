@@ -24,9 +24,13 @@ class Rover {
         val commands = toCommands(commandInput)
 
         return commands.fold(startingPosition) { currentPosition, command ->
-            if (command == Command.M) move(
-                currentPosition
-            ) else turnLeft(currentPosition)
+            when (command) {
+                Command.M -> move(
+                    currentPosition
+                )
+                Command.L -> turnLeft(currentPosition)
+                Command.R -> turnRight(currentPosition)
+            }
         }.toString()
     }
 
@@ -53,6 +57,24 @@ class Rover {
             Direction.W to Direction.N
         )
 
+        return turn(mappings, currentPosition)
+    }
+
+    private fun turnRight(currentPosition: Position): Position {
+        val mappings = mapOf(
+            Direction.N to Direction.W,
+            Direction.W to Direction.S,
+            Direction.S to Direction.E,
+            Direction.E to Direction.N
+        )
+
+        return turn(mappings, currentPosition)
+    }
+
+    private fun turn(
+        mappings: Map<Direction, Direction>,
+        currentPosition: Position
+    ): Position {
         require(mappings.containsKey(currentPosition.direction)) { "Unknown Direction: ${currentPosition.direction}" }
 
         return currentPosition.copy(direction = mappings[currentPosition.direction]!!)
