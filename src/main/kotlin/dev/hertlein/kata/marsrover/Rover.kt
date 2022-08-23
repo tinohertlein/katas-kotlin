@@ -46,11 +46,15 @@ class Rover {
     }
 
     private fun turnLeft(currentPosition: Position): Position {
-        return when (currentPosition.direction) {
-            Direction.N -> currentPosition.let {
-                it.copy(direction = Direction.E)
-            }
-            else -> currentPosition
-        }
+        val mappings = mapOf(
+            Direction.N to Direction.E,
+            Direction.E to Direction.S,
+            Direction.S to Direction.W,
+            Direction.W to Direction.N
+        )
+
+        require(mappings.containsKey(currentPosition.direction)) { "Unknown Direction: ${currentPosition.direction}" }
+
+        return currentPosition.copy(direction = mappings[currentPosition.direction]!!)
     }
 }

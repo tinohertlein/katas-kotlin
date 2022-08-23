@@ -4,6 +4,8 @@ import dev.hertlein.kata.marsrover.Rover.Command
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 internal class RoverTest {
 
@@ -44,11 +46,12 @@ internal class RoverTest {
             assertThat(position).isEqualTo("2:0:N")
         }
 
-        @Test
-        fun `should turn left facing 'N'`() {
-            val position = rover.navigate("L")
+        @ParameterizedTest
+        @CsvSource("L,E", "LL,S", "LLL,W", "LLLL,N")
+        fun `should turn left`(input: String, output: String) {
+            val position = rover.navigate(input)
 
-            assertThat(position).isEqualTo("0:0:E")
+            assertThat(position).isEqualTo("0:0:$output")
         }
 
     }
