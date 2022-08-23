@@ -47,7 +47,7 @@ internal class RoverTest {
         }
 
         @ParameterizedTest
-        @CsvSource("L,E", "LL,S", "LLL,W", "LLLL,N")
+        @CsvSource("L,W", "LL,S", "LLL,E", "LLLL,N")
         fun `should turn left`(input: String, output: String) {
             val position = rover.navigate(input)
 
@@ -55,7 +55,7 @@ internal class RoverTest {
         }
 
         @ParameterizedTest
-        @CsvSource("R,W", "RR,S", "RRR,E", "RRRR,N")
+        @CsvSource("R,E", "RR,S", "RRR,W", "RRRR,N")
         fun `should turn right`(input: String, output: String) {
             val position = rover.navigate(input)
 

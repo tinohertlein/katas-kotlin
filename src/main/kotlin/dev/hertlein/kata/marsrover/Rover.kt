@@ -34,7 +34,6 @@ class Rover {
         }.toString()
     }
 
-
     fun toCommands(commandInput: String) = commandInput
         .split("")
         .filter { it.isNotEmpty() }
@@ -51,10 +50,10 @@ class Rover {
 
     private fun turnLeft(currentPosition: Position): Position {
         val mappings = mapOf(
-            Direction.N to Direction.E,
-            Direction.E to Direction.S,
-            Direction.S to Direction.W,
-            Direction.W to Direction.N
+            Direction.N to Direction.W,
+            Direction.W to Direction.S,
+            Direction.S to Direction.E,
+            Direction.E to Direction.N,
         )
 
         return turn(mappings, currentPosition)
@@ -62,10 +61,10 @@ class Rover {
 
     private fun turnRight(currentPosition: Position): Position {
         val mappings = mapOf(
-            Direction.N to Direction.W,
-            Direction.W to Direction.S,
-            Direction.S to Direction.E,
-            Direction.E to Direction.N
+            Direction.N to Direction.E,
+            Direction.E to Direction.S,
+            Direction.S to Direction.W,
+            Direction.W to Direction.N
         )
 
         return turn(mappings, currentPosition)
