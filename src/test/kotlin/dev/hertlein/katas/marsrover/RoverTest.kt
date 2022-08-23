@@ -1,6 +1,6 @@
-package dev.hertlein.kata.marsrover
+package dev.hertlein.katas.marsrover
 
-import dev.hertlein.kata.marsrover.Rover.*
+import dev.hertlein.katas.marsrover.Rover.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

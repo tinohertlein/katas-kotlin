@@ -1,4 +1,4 @@
-package dev.hertlein.kata.marsrover
+package dev.hertlein.katas.marsrover
 
 const val DEFAULT_GRID_SIZE = 10
 
