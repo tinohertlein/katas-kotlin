@@ -1,7 +1,8 @@
 package dev.hertlein.kata.marsrover
 
+const val DEFAULT_GRID_SIZE = 10
 
-class Rover {
+class Rover(private val grid: Grid = Grid(DEFAULT_GRID_SIZE, DEFAULT_GRID_SIZE)) {
 
     private val startingPosition = Position(Direction.N, Coordinate(0, 0))
 
@@ -20,21 +21,21 @@ class Rover {
         override fun toString() = "${coordinate.x}:${coordinate.y}:$direction"
     }
 
+    data class Grid(val dimX: Int, val dimY: Int)
+
     fun navigate(commandInput: String = ""): String {
         val commands = toCommands(commandInput)
 
         return commands.fold(startingPosition) { currentPosition, command ->
             when (command) {
-                Command.M -> move(
-                    currentPosition
-                )
+                Command.M -> move(currentPosition)
                 Command.L -> turnLeft(currentPosition)
                 Command.R -> turnRight(currentPosition)
             }
         }.toString()
     }
 
-    fun toCommands(commandInput: String) = commandInput
+    private fun toCommands(commandInput: String) = commandInput
         .split("")
         .filter { it.isNotEmpty() }
         .map { Command.valueOf(it.uppercase()) }
@@ -42,18 +43,27 @@ class Rover {
     private fun move(currentPosition: Position): Position {
         return when (currentPosition.direction) {
             Direction.N -> currentPosition.let {
-                it.copy(coordinate = it.coordinate.copy(y = it.coordinate.y + 1))
+                wrapAround(it.copy(coordinate = it.coordinate.copy(y = it.coordinate.y + 1)))
             }
             Direction.E -> currentPosition.let {
-                it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x + 1))
+                wrapAround(it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x + 1)))
             }
             Direction.S -> currentPosition.let {
-                it.copy(coordinate = it.coordinate.copy(y = it.coordinate.y - 1))
+                wrapAround(it.copy(coordinate = it.coordinate.copy(y = it.coordinate.y - 1)))
             }
             Direction.W -> currentPosition.let {
-                it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x - 1))
+                wrapAround(it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x - 1)))
             }
         }
+    }
+
+    private fun wrapAround(currentPosition: Position): Position = currentPosition.let {
+        return it.copy(
+            coordinate = it.coordinate.copy(
+                x = it.coordinate.x % grid.dimX,
+                y = it.coordinate.y % grid.dimY
+            )
+        )
     }
 
     private fun turnLeft(currentPosition: Position): Position {
