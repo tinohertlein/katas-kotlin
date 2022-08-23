@@ -5,6 +5,10 @@ class Rover {
 
     private val startingPosition = Position(Direction.N, Coordinate(0, 0))
 
+    enum class Command {
+        L, R, M
+    }
+
     enum class Direction {
         N, S, E, W
     }
@@ -16,7 +20,17 @@ class Rover {
         override fun toString() = "${coordinate.x}:${coordinate.y}:$direction"
     }
 
-    fun navigate(): String {
+    fun navigate(commandInput: String = ""): String {
+        toCommands(commandInput)
+
+
         return startingPosition.toString()
     }
+
+    fun toCommands(commandInput: String) = commandInput
+        .split("")
+        .filter { it.isNotEmpty() }
+        .map { Command.valueOf(it.uppercase()) }
+
+
 }
