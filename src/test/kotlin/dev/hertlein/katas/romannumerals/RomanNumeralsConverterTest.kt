@@ -12,12 +12,13 @@ internal class RomanNumeralsConverterTest {
 
     @Nested
     inner class UnitTests {
+
         @Test
         fun `should convert empty String`() {
             assertThat(converter.convert("")).isEqualTo(0)
         }
 
-        @ParameterizedTest(name = "should convert {0} to {1}")
+        @ParameterizedTest(name = "{0} to {1}")
         @CsvSource(
             "I,1",
             "II,2",
@@ -42,7 +43,7 @@ internal class RomanNumeralsConverterTest {
     @Nested
     inner class AcceptanceTests {
 
-        @ParameterizedTest(name = "should convert {0} to {1}")
+        @ParameterizedTest(name = "{0} to {1}")
         @CsvSource("I,1", "IV,4", "IX,9", "XXIX,29", "LXXX,80", "CCXCIV,294", "MMXIX,2019")
         fun `should convert roman numerals given in examples`(numeral: String, decimal: Int) {
             assertThat(converter.convert(numeral)).isEqualTo(decimal)
