@@ -45,11 +45,7 @@ class Rover(
     fun navigate(commandInput: String = ""): String =
         toCommands(commandInput)
             .fold(startingPosition) { currentPosition, command ->
-                when (command) {
-                    Command.M -> move(currentPosition)
-                    Command.L -> turnLeft(currentPosition)
-                    Command.R -> turnRight(currentPosition)
-                }
+                executeCommand(command, currentPosition)
             }
             .toString()
 
@@ -57,6 +53,12 @@ class Rover(
         .split("")
         .filter { it.isNotEmpty() }
         .map { Command.valueOf(it.uppercase()) }
+
+    private fun executeCommand(command: Command, currentPosition: Position) = when (command) {
+        Command.M -> move(currentPosition)
+        Command.L -> turnLeft(currentPosition)
+        Command.R -> turnRight(currentPosition)
+    }
 
     private fun move(currentPosition: Position): Position {
         val nextPosition = when (currentPosition.direction) {
@@ -73,8 +75,16 @@ class Rover(
                 it.copy(coordinate = it.coordinate.copy(x = it.coordinate.x - 1))
             }
         }
-
         return detectCollision(currentPosition, wrapAround(nextPosition))
+    }
+
+    private fun detectCollision(currentPosition: Position, nextPosition: Position): Position {
+        return if (obstacles.any { it.coordinate == nextPosition.coordinate }
+        ) {
+            currentPosition.copy(isCollision = true)
+        } else {
+            nextPosition
+        }
     }
 
     private fun wrapAround(currentPosition: Position): Position = currentPosition.let {
@@ -86,22 +96,11 @@ class Rover(
         )
     }
 
-    private fun detectCollision(currentPosition: Position, nextPosition: Position): Position {
-        return if (obstacles.map { it.coordinate }.contains(nextPosition.coordinate)) {
-            currentPosition.copy(isCollision = true)
-        } else {
-            nextPosition
-        }
-    }
-
     private fun turnLeft(currentPosition: Position): Position = turn(Direction.turnLeftMappings, currentPosition)
 
     private fun turnRight(currentPosition: Position): Position = turn(Direction.turnRightMappings, currentPosition)
 
-    private fun turn(
-        mappings: Map<Direction, Direction>,
-        currentPosition: Position
-    ): Position {
+    private fun turn(mappings: Map<Direction, Direction>, currentPosition: Position): Position {
         require(mappings.containsKey(currentPosition.direction)) { "Unknown Direction: ${currentPosition.direction}" }
 
         return currentPosition.copy(direction = mappings[currentPosition.direction]!!)
