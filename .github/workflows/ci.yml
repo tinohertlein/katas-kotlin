@@ -1,4 +1,4 @@
-name: The Mars Rover Kata - CI
+name: Kotlin Katas
 
 on:
   push:
