@@ -17,6 +17,15 @@ class RomanNumeralsConverter {
         D(500),
         CM(900),
         M(1000);
+
+        companion object {
+
+            fun fromPrefix(input: String): RomanNumeral? {
+                return values()
+                    .reversed()
+                    .firstOrNull { input.startsWith(it.name) }
+            }
+        }
     }
 
     @Suppress("TooGenericExceptionThrown")
@@ -37,29 +46,15 @@ class RomanNumeralsConverter {
         return decimalHeadRecursively
     }
 
-    private fun convertHeadRecursively(numeral: String): Int {
-        RomanNumeral
-            .values()
-            .reversed()
-            .forEach {
-                if (numeral.startsWith(it.name)) {
-                    return it.decimalValue + convertHeadRecursively(numeral.removePrefix(it.name))
-                }
-            }
-        return 0
-    }
+    private fun convertHeadRecursively(numeral: String): Int = RomanNumeral
+        .fromPrefix(numeral)
+        ?.let { convertHeadRecursively(numeral.removePrefix(it.name)) + it.decimalValue }
+        ?: 0
 
-    private fun convertTailRecursively(numeral: String, decimal: Int = 0): Int {
-        RomanNumeral
-            .values()
-            .reversed()
-            .forEach {
-                if (numeral.startsWith(it.name)) {
-                    return convertTailRecursively(numeral.removePrefix(it.name), decimal + it.decimalValue)
-                }
-            }
-        return decimal
-    }
+    private fun convertTailRecursively(numeral: String, decimal: Int = 0): Int = RomanNumeral
+        .fromPrefix(numeral)
+        ?.let { convertTailRecursively(numeral.removePrefix(it.name), decimal + it.decimalValue) }
+        ?: decimal
 
     private fun convertByLooping(numeral: String): Int {
         var decimal = 0
@@ -67,13 +62,10 @@ class RomanNumeralsConverter {
 
         while (numeralForLooping.isNotEmpty()) {
             RomanNumeral
-                .values()
-                .reversed()
-                .forEach {
-                    if (numeralForLooping.startsWith(it.name)) {
-                        decimal += it.decimalValue
-                        numeralForLooping = numeralForLooping.removePrefix(it.name)
-                    }
+                .fromPrefix(numeralForLooping)
+                ?.let {
+                    decimal += it.decimalValue
+                    numeralForLooping = numeralForLooping.removePrefix(it.name)
                 }
         }
         return decimal
