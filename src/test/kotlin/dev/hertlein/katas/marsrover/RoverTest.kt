@@ -16,41 +16,31 @@ internal class RoverTest {
 
         @Test
         fun `should start at initial position`() {
-            val position = rover.navigate()
-
-            assertThat(position).isEqualTo("0:0:N")
+            assertThat(rover.navigate()).isEqualTo("0:0:N")
         }
 
         @ParameterizedTest
         @CsvSource("MM,0:2:N", "RM,1:0:E", "RRM,0:-1:S", "RRRM,-1:0:W")
-        fun `should move`(input: String, output: String) {
-            val position = rover.navigate(input)
-
-            assertThat(position).isEqualTo(output)
+        fun `should move`(commands: String, expectedFinalPosition: String) {
+            assertThat(rover.navigate(commands)).isEqualTo(expectedFinalPosition)
         }
 
         @ParameterizedTest
         @CsvSource("L,W", "LL,S", "LLL,E", "LLLL,N")
-        fun `should turn left`(input: String, output: String) {
-            val position = rover.navigate(input)
-
-            assertThat(position).isEqualTo("0:0:$output")
+        fun `should turn left`(commands: String, expectedFinalPosition: String) {
+            assertThat(rover.navigate(commands)).isEqualTo("0:0:$expectedFinalPosition")
         }
 
         @ParameterizedTest
         @CsvSource("R,E", "RR,S", "RRR,W", "RRRR,N")
-        fun `should turn right`(input: String, output: String) {
-            val position = rover.navigate(input)
-
-            assertThat(position).isEqualTo("0:0:$output")
+        fun `should turn right`(commands: String, expectedFinalPosition: String) {
+            assertThat(rover.navigate(commands)).isEqualTo("0:0:$expectedFinalPosition")
         }
 
         @ParameterizedTest
         @CsvSource("MMMMMMMMMM,0:0:N", "LMMMMMMMMMM,0:0:W", "RMMMMMMMMMM,0:0:E", "RRMMMMMMMMMM,0:0:S")
-        fun `should wrap around from N`(input: String, output: String) {
-            val position = rover.navigate(input)
-
-            assertThat(position).isEqualTo(output)
+        fun `should wrap around from N`(commands: String, expectedFinalPosition: String) {
+            assertThat(rover.navigate(commands)).isEqualTo(expectedFinalPosition)
         }
     }
 
@@ -58,31 +48,20 @@ internal class RoverTest {
     inner class AcceptanceTests {
 
         @Test
-        fun `#1`() {
-            val position = rover.navigate("")
+        fun `should navigate with commands given in example #1`() {
+            assertThat(rover.navigate("")).isEqualTo("0:0:N")
+        }
 
-            assertThat(position).isEqualTo("0:0:N")
+        @ParameterizedTest
+        @CsvSource("MMRMMLM,2:3:N", "MMMMMMMMMM,0:0:N")
+        fun `should navigate with commands given in examples`(commands: String, expectedFinalPosition: String) {
+            assertThat(rover.navigate(commands)).isEqualTo(expectedFinalPosition)
         }
 
         @Test
-        fun `#2`() {
-            val position = rover.navigate("MMRMMLM")
-
-            assertThat(position).isEqualTo("2:3:N")
-        }
-
-        @Test
-        fun `#3`() {
-            val position = rover.navigate("MMMMMMMMMM")
-
-            assertThat(position).isEqualTo("0:0:N")
-        }
-
-        @Test
-        fun `#4`() {
-            val position = Rover(obstacles = listOf(Obstacle(Coordinate(0, 3)))).navigate("MMMM")
-
-            assertThat(position).isEqualTo("Err:0:2:N")
+        fun `should navigate with commands given in example #4`() {
+            assertThat(Rover(obstacles = listOf(Obstacle(Coordinate(0, 3)))).navigate("MMMM"))
+                .isEqualTo("Err:0:2:N")
         }
     }
 }
