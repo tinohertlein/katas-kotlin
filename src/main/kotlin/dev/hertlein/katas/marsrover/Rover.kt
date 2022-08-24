@@ -79,8 +79,7 @@ class Rover(
     }
 
     private fun detectCollision(currentPosition: Position, nextPosition: Position): Position {
-        return if (obstacles.any { it.coordinate == nextPosition.coordinate }
-        ) {
+        return if (obstacles.any { it.coordinate == nextPosition.coordinate }) {
             currentPosition.copy(isCollision = true)
         } else {
             nextPosition
