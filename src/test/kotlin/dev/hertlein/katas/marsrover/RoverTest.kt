@@ -1,6 +1,7 @@
 package dev.hertlein.katas.marsrover
 
-import dev.hertlein.katas.marsrover.Rover.*
+import dev.hertlein.katas.marsrover.Rover.Coordinate
+import dev.hertlein.katas.marsrover.Rover.Obstacle
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -54,13 +55,16 @@ internal class RoverTest {
 
         @ParameterizedTest
         @CsvSource("MMRMMLM,2:3:N", "MMMMMMMMMM,0:0:N")
-        fun `should navigate with commands given in examples`(commands: String, expectedFinalPosition: String) {
+        fun `should navigate with commands given in example #2 & #3`(commands: String, expectedFinalPosition: String) {
             assertThat(rover.navigate(commands)).isEqualTo(expectedFinalPosition)
         }
 
         @Test
         fun `should navigate with commands given in example #4`() {
-            assertThat(Rover(obstacles = listOf(Obstacle(Coordinate(0, 3)))).navigate("MMMM"))
+            assertThat(
+                Rover(obstacles = listOf(Obstacle(Coordinate(0, 3))))
+                    .navigate("MMMM")
+            )
                 .isEqualTo("Err:0:2:N")
         }
     }
