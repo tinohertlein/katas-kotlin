@@ -1,0 +1,8 @@
+{
+  "next": "https://swapi.dev/api/people/?page=2",
+  "results": [
+    {
+      "name": "Luke Skywalker"
+    }
+  ]
+}
