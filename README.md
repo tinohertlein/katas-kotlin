@@ -8,4 +8,5 @@ A collection of Katas I was doing to practice (& refresh) Kotlin:
 * [The Roman Numerals Converter Kata](docs/romannumerals.md)
 * [The Bowling Game Kata](docs/bowlinggame.md)
 * [The Star Wars API Kata](docs/starwarsapi.md)
+* [The Game Of Live Kata](docs/gameoflife.md)
 
