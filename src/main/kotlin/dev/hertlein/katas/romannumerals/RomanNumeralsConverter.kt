@@ -28,48 +28,106 @@ class RomanNumeralsConverter {
         }
     }
 
-    @Suppress("TooGenericExceptionThrown")
-    fun convert(numeral: String): Int {
-        val decimalHeadRecursively = convertHeadRecursively(numeral)
-        val decimalTailRecursively = convertTailRecursively(numeral)
-        val decimalByLooping = convertByLooping(numeral)
+    fun toDecimals(numeral: String) = ToDecimals().convert(numeral)
 
-        if (!allConversionResultsAreEqual(decimalHeadRecursively, decimalTailRecursively, decimalByLooping)) {
-            throw RuntimeException(
-                """There is a bug, as the conversion results differ: 
+    fun fromDecimals(decimal: Int) = FromDecimals().convert(decimal)
+
+    inner class ToDecimals {
+
+        @Suppress("TooGenericExceptionThrown")
+        fun convert(numeral: String): Int {
+            val decimalHeadRecursively = convertHeadRecursively(numeral)
+            val decimalTailRecursively = convertTailRecursively(numeral)
+            val decimalByLooping = convertByLooping(numeral)
+
+            if (!allConversionResultsAreEqual(decimalHeadRecursively, decimalTailRecursively, decimalByLooping)) {
+                throw RuntimeException(
+                    """There is a bug, as the conversion results differ: 
                 | headRecursively: $decimalHeadRecursively 
                 | tailRecursively: $decimalTailRecursively 
                 | byLooping: $decimalByLooping""".trimMargin()
-            )
+                )
+            }
+
+            return decimalHeadRecursively
         }
 
-        return decimalHeadRecursively
+        private fun convertHeadRecursively(numeral: String): Int = RomanNumeral
+            .fromPrefix(numeral)
+            ?.let { convertHeadRecursively(numeral.removePrefix(it.name)) + it.decimalValue }
+            ?: 0
+
+        private fun convertTailRecursively(numeral: String, decimal: Int = 0): Int = RomanNumeral
+            .fromPrefix(numeral)
+            ?.let { convertTailRecursively(numeral.removePrefix(it.name), decimal + it.decimalValue) }
+            ?: decimal
+
+        private fun convertByLooping(numeral: String): Int {
+            var decimal = 0
+            var numeralForLooping = numeral
+
+            while (numeralForLooping.isNotEmpty()) {
+                RomanNumeral
+                    .fromPrefix(numeralForLooping)
+                    ?.let {
+                        decimal += it.decimalValue
+                        numeralForLooping = numeralForLooping.removePrefix(it.name)
+                    }
+            }
+            return decimal
+        }
     }
 
-    private fun convertHeadRecursively(numeral: String): Int = RomanNumeral
-        .fromPrefix(numeral)
-        ?.let { convertHeadRecursively(numeral.removePrefix(it.name)) + it.decimalValue }
-        ?: 0
+    inner class FromDecimals {
 
-    private fun convertTailRecursively(numeral: String, decimal: Int = 0): Int = RomanNumeral
-        .fromPrefix(numeral)
-        ?.let { convertTailRecursively(numeral.removePrefix(it.name), decimal + it.decimalValue) }
-        ?: decimal
+        @Suppress("TooGenericExceptionThrown")
+        fun convert(decimal: Int): String {
+            val numeralHeadRecursively = convertHeadRecursively(decimal)
+            val numeralTailRecursively = convertTailRecursively(decimal)
+            val numeralByLooping = convertByLooping(decimal)
 
-    private fun convertByLooping(numeral: String): Int {
-        var decimal = 0
-        var numeralForLooping = numeral
+            if (!allConversionResultsAreEqual(numeralHeadRecursively, numeralTailRecursively, numeralByLooping)) {
+                throw RuntimeException(
+                    """There is a bug, as the conversion results differ:
+                | numeralHeadRecursively: $numeralHeadRecursively
+                | numeralTailRecursively: $numeralTailRecursively
+                | numeralByLooping: $numeralByLooping""".trimMargin()
+                )
+            }
 
-        while (numeralForLooping.isNotEmpty()) {
+            return numeralHeadRecursively
+        }
+
+        private fun convertHeadRecursively(decimal: Int): String =
             RomanNumeral
-                .fromPrefix(numeralForLooping)
-                ?.let {
-                    decimal += it.decimalValue
-                    numeralForLooping = numeralForLooping.removePrefix(it.name)
+                .values()
+                .reversed()
+                .firstOrNull { decimal - it.decimalValue >= 0 }
+                ?.let { it.name + convertHeadRecursively(decimal - it.decimalValue) }
+                ?: ""
+
+        private fun convertTailRecursively(decimal: Int, numeral: String = ""): String =
+            RomanNumeral
+                .values()
+                .reversed()
+                .firstOrNull { decimal - it.decimalValue >= 0 }
+                ?.let { convertTailRecursively(decimal - it.decimalValue, numeral + it.name) }
+                ?: numeral
+
+
+        private fun convertByLooping(decimal: Int): String {
+            var numeral = ""
+            var decimalForLooping = decimal
+
+            RomanNumeral.values().reversed().forEach {
+                while (decimalForLooping - it.decimalValue >= 0) {
+                    decimalForLooping -= it.decimalValue
+                    numeral += it.name
                 }
+            }
+            return numeral
         }
-        return decimal
     }
 
-    private fun allConversionResultsAreEqual(vararg results: Int) = results.toSet().size == 1
+    private fun allConversionResultsAreEqual(vararg results: Any) = results.toSet().size == 1
 }
