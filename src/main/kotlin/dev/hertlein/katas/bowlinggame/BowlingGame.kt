@@ -11,19 +11,16 @@ class BowlingGame {
         state = state.roll(pins)
     }
 
-    @Suppress("TooGenericExceptionThrown")
     fun score(): Int {
         val scoreHeadRecursively = state.scoreHeadRecursively()
         val scoreTailRecursively = state.scoreTailRecursively()
         val scoreByLooping = state.scoreByLooping()
 
-        if (!allScoresAreEqual(scoreHeadRecursively, scoreTailRecursively, scoreByLooping)) {
-            throw RuntimeException(
-                """There is a bug, as the scores differ: 
+        check(allScoresAreEqual(scoreHeadRecursively, scoreTailRecursively, scoreByLooping)) {
+            """There is a bug, as the scores differ: 
                 | scoreHeadRecursively: $scoreHeadRecursively
                 | scoreTailRecursively: $scoreTailRecursively
                 | scoreByLooping: $scoreByLooping""".trimMargin()
-            )
         }
 
         return scoreHeadRecursively

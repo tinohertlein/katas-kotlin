@@ -34,19 +34,16 @@ class RomanNumeralsConverter {
 
     inner class ToDecimals {
 
-        @Suppress("TooGenericExceptionThrown")
         fun convert(numeral: String): Int {
             val decimalHeadRecursively = convertHeadRecursively(numeral)
             val decimalTailRecursively = convertTailRecursively(numeral)
             val decimalByLooping = convertByLooping(numeral)
 
-            if (!allConversionResultsAreEqual(decimalHeadRecursively, decimalTailRecursively, decimalByLooping)) {
-                throw RuntimeException(
-                    """There is a bug, as the conversion results differ: 
+            check(allConversionResultsAreEqual(decimalHeadRecursively, decimalTailRecursively, decimalByLooping)) {
+                """There is a bug, as the conversion results differ: 
                 | headRecursively: $decimalHeadRecursively 
                 | tailRecursively: $decimalTailRecursively 
                 | byLooping: $decimalByLooping""".trimMargin()
-                )
             }
 
             return decimalHeadRecursively
@@ -80,19 +77,16 @@ class RomanNumeralsConverter {
 
     inner class FromDecimals {
 
-        @Suppress("TooGenericExceptionThrown")
         fun convert(decimal: Int): String {
             val numeralHeadRecursively = convertHeadRecursively(decimal)
             val numeralTailRecursively = convertTailRecursively(decimal)
             val numeralByLooping = convertByLooping(decimal)
 
-            if (!allConversionResultsAreEqual(numeralHeadRecursively, numeralTailRecursively, numeralByLooping)) {
-                throw RuntimeException(
-                    """There is a bug, as the conversion results differ:
+            check(allConversionResultsAreEqual(numeralHeadRecursively, numeralTailRecursively, numeralByLooping)) {
+                """There is a bug, as the conversion results differ:
                 | numeralHeadRecursively: $numeralHeadRecursively
                 | numeralTailRecursively: $numeralTailRecursively
                 | numeralByLooping: $numeralByLooping""".trimMargin()
-                )
             }
 
             return numeralHeadRecursively
