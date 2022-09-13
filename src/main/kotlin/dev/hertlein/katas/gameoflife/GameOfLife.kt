@@ -1,7 +1,7 @@
 package dev.hertlein.katas.gameoflife
 
 
-class GameOfLife(var grid: Grid) {
+class GameOfLife(val grid: Grid) {
 
     data class Cell(val row: Int, val column: Int, val isAlive: Boolean) {
         fun isNeighbourOf(cell: Cell): Boolean {

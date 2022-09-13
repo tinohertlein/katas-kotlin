@@ -3,8 +3,10 @@ package dev.hertlein.katas.gameoflife
 import dev.hertlein.katas.gameoflife.GameOfLife.Cell
 import dev.hertlein.katas.gameoflife.GameOfLife.Grid
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+@DisplayName("GameOfLife")
 internal class GameOfLifeTest {
 
     @Test
